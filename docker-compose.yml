@@ -1,0 +1,5 @@
+version: "3"
+services:
+  web:
+    image: mongo-java-jar:latest
+    restart: on-failure
