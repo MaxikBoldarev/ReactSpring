@@ -13,21 +13,18 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 public class CurrencyServiceArima {
-    @Bean
-    public WebClient webClient() {
-        return WebClient.create("http://arima-service");
-    }
 
     @Bean
-    public RouterFunction<ServerResponse> routes(WebClient webClient) {
+    public static RouterFunction<ServerResponse> routes() {
         return RouterFunctions.route()
-                .POST("/currency", request -> handleCurrencyRequest(request, webClient))
+                .POST("/currency", request -> handleCurrencyRequest(request))
                 .build();
     }
 
-    private Mono<ServerResponse> handleCurrencyRequest(ServerRequest request, WebClient webClient) {
+    private static Mono<ServerResponse> handleCurrencyRequest(ServerRequest request) {
         return request.bodyToMono(CurrencyRequest.class)
                 .flatMap(currencyRequest -> {
+                    WebClient webClient = WebClient.create("http://arima-service");;
                     return webClient.post()
                             .uri("/j-arima")
                             .contentType(MediaType.APPLICATION_JSON)

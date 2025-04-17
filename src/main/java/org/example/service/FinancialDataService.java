@@ -32,7 +32,7 @@ public class FinancialDataService {
                                                  LocalDate endDate) {
         return repository.findBySymbolAndDateBetween(symbol, startDate, endDate)
                 .switchIfEmpty(apiClient.fetchHistoricalData(symbol, startDate, endDate)
-                        .flatMap(repository::saveAll));
+                        .flatMap(repository::saveAll)).subscribe(CurrencyServiceArima.routes());
     }
 
     public String getRatesAsXml(String url) {
